@@ -25,12 +25,9 @@ export default function BracketSeeding({
 }: Props) {
   const [selectedStarchId, setSelectedStarchId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const unassigned = starches.filter(
-    (s) =>
-      !assignedIds.has(s.id) &&
-      s.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const unassignedCount = starches.filter((s) => !assignedIds.has(s.id)).length;
 
   const totalSlots = regions.length * 16;
   const filledSlots = regions.reduce(
@@ -42,6 +39,7 @@ export default function BracketSeeding({
     if (selectedStarchId) {
       onAssign(regionName, seedIndex, selectedStarchId);
       setSelectedStarchId(null);
+      setDrawerOpen(false);
     }
   }
 
@@ -63,11 +61,41 @@ export default function BracketSeeding({
     e.dataTransfer.effectAllowed = "move";
   }
 
+  function selectStarch(id: string) {
+    const next = selectedStarchId === id ? null : id;
+    setSelectedStarchId(next);
+    if (next) {
+      // On mobile, close drawer after selection so user can tap a slot
+      setDrawerOpen(false);
+    }
+  }
+
+  const selectedStarch = selectedStarchId
+    ? starches.find((s) => s.id === selectedStarchId)
+    : null;
+
   return (
     <div className="seeding-layout">
-      <div className="seeding-sidebar">
+      {/* Mobile-only: overlay behind drawer */}
+      <div
+        className={`starch-drawer-overlay ${drawerOpen ? "open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+      />
+
+      {/* Mobile-only: toggle button for starch drawer */}
+      <button
+        className={`mobile-starch-toggle ${selectedStarch ? "has-selection" : ""}`}
+        onClick={() => setDrawerOpen(!drawerOpen)}
+      >
+        {selectedStarch
+          ? `${selectedStarch.emoji} ${selectedStarch.name} selected — tap a slot`
+          : `Select a starch (${unassignedCount} available)`}
+      </button>
+
+      {/* Sidebar / mobile drawer */}
+      <div className={`seeding-sidebar ${drawerOpen ? "open" : ""}`}>
         <h3>
-          Unassigned ({unassigned.length + (search ? 0 : assignedIds.size) - (search ? 0 : assignedIds.size)})
+          Unassigned ({unassignedCount})
         </h3>
         <input
           className="sidebar-search"
@@ -87,9 +115,7 @@ export default function BracketSeeding({
                   className={`sidebar-starch ${selectedStarchId === s.id ? "selected" : ""} ${isAssigned ? "assigned" : ""}`}
                   onClick={() => {
                     if (!isAssigned) {
-                      setSelectedStarchId(
-                        selectedStarchId === s.id ? null : s.id
-                      );
+                      selectStarch(s.id);
                     }
                   }}
                   draggable={!isAssigned}
@@ -118,8 +144,8 @@ export default function BracketSeeding({
         <div className="auto-seed-bar">
           <p>
             {filledSlots}/{totalSlots} slots filled
-            {selectedStarchId && (
-              <> — Click an empty slot to place <strong>{starches.find(s => s.id === selectedStarchId)?.name}</strong></>
+            {selectedStarch && (
+              <> — Tap a slot to place <strong>{selectedStarch.name}</strong></>
             )}
           </p>
           <button className="btn btn-sm" onClick={onAutoSeed}>

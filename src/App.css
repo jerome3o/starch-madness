@@ -655,6 +655,7 @@
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
   width: 280px;
+  max-width: 100%;
 }
 
 .tournament-name-input:hover {
@@ -665,4 +666,249 @@
   outline: none;
   border-color: var(--primary);
   background: var(--slot-empty);
+}
+
+/* Mobile starch drawer toggle */
+.mobile-starch-toggle {
+  display: none;
+}
+
+.starch-drawer-overlay {
+  display: none;
+}
+
+/* ========================
+   MOBILE RESPONSIVE STYLES
+   ======================== */
+
+@media (max-width: 768px) {
+  /* Header */
+  .header {
+    padding: 0.5rem 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.1rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .tournament-name-input {
+    font-size: 1.1rem;
+    width: 160px;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
+  }
+
+  /* Tabs */
+  .tabs {
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* Main content */
+  .main-content {
+    padding: 0.75rem;
+  }
+
+  /* Starch Pool */
+  .pool-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .starch-grid {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .starch-card {
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Always show actions on mobile (no hover on touch) */
+  .starch-actions {
+    opacity: 1;
+  }
+
+  /* Bracket Seeding - collapse sidebar into drawer */
+  .seeding-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .seeding-sidebar {
+    display: none;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    max-height: 55vh;
+    background: var(--surface);
+    border-top: 2px solid var(--primary);
+    border-radius: 12px 12px 0 0;
+    padding: 0.75rem;
+    z-index: 90;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .seeding-sidebar.open {
+    display: block;
+  }
+
+  .starch-drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 89;
+  }
+
+  .starch-drawer-overlay.open {
+    display: block;
+  }
+
+  .mobile-starch-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.75rem;
+    background: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .mobile-starch-toggle.has-selection {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .sidebar-starch-list {
+    max-height: calc(55vh - 100px);
+    overflow-y: auto;
+  }
+
+  /* Auto-seed bar */
+  .auto-seed-bar {
+    flex-wrap: wrap;
+    padding: 0.5rem 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .auto-seed-bar p {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Regions grid - single column */
+  .regions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  /* Seed slots - always show remove button on mobile */
+  .seed-remove {
+    opacity: 1;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* Export */
+  .export-section {
+    max-width: 100%;
+  }
+
+  .export-actions {
+    flex-direction: column;
+  }
+
+  .export-actions .btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.6rem;
+  }
+
+  .export-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+  }
+
+  .summary-card .value {
+    font-size: 1.4rem;
+  }
+
+  .export-preview {
+    padding: 0.5rem;
+  }
+
+  .export-preview pre {
+    font-size: 0.7rem;
+  }
+
+  /* Modal */
+  .modal {
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .modal {
+    border-radius: 12px 12px 0 0;
+    width: 100%;
+  }
+
+  .emoji-picker {
+    max-height: 100px;
+  }
+
+  .image-upload-area {
+    flex-wrap: wrap;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .tournament-name-input {
+    width: 120px;
+    font-size: 1rem;
+  }
+
+  .tab {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.4rem;
+  }
+
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
 }
