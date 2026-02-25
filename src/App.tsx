@@ -22,6 +22,7 @@ function loadState(): {
   starches: Starch[];
   regions: Region[];
   tournamentName: string;
+  tab: Tab;
 } {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -31,6 +32,7 @@ function loadState(): {
         starches: parsed.starches ?? DEFAULT_STARCHES,
         regions: parsed.regions ?? createEmptyRegions(),
         tournamentName: parsed.tournamentName ?? "Starch Madness 2026",
+        tab: parsed.tab ?? "pool",
       };
     }
   } catch {
@@ -40,12 +42,13 @@ function loadState(): {
     starches: DEFAULT_STARCHES,
     regions: createEmptyRegions(),
     tournamentName: "Starch Madness 2026",
+    tab: "pool",
   };
 }
 
 function App() {
-  const [tab, setTab] = useState<Tab>("pool");
   const initial = loadState();
+  const [tab, setTab] = useState<Tab>(initial.tab);
   const [starches, setStarches] = useState<Starch[]>(initial.starches);
   const [regions, setRegions] = useState<Region[]>(initial.regions);
   const [tournamentName, setTournamentName] = useState(initial.tournamentName);
@@ -54,9 +57,9 @@ function App() {
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ starches, regions, tournamentName })
+      JSON.stringify({ starches, regions, tournamentName, tab })
     );
-  }, [starches, regions, tournamentName]);
+  }, [starches, regions, tournamentName, tab]);
 
   // Compute assigned starch IDs
   const assignedIds = useMemo(() => {
