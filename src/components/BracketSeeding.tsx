@@ -26,6 +26,10 @@ export default function BracketSeeding({
   const [selectedStarchId, setSelectedStarchId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [pendingSlot, setPendingSlot] = useState<{
+    regionName: string;
+    seedIndex: number;
+  } | null>(null);
 
   const unassignedCount = starches.filter((s) => !assignedIds.has(s.id)).length;
 
@@ -39,7 +43,12 @@ export default function BracketSeeding({
     if (selectedStarchId) {
       onAssign(regionName, seedIndex, selectedStarchId);
       setSelectedStarchId(null);
+      setPendingSlot(null);
       setDrawerOpen(false);
+    } else {
+      // No starch selected — remember which slot was tapped and open the drawer
+      setPendingSlot({ regionName, seedIndex });
+      setDrawerOpen(true);
     }
   }
 
@@ -62,6 +71,15 @@ export default function BracketSeeding({
   }
 
   function selectStarch(id: string) {
+    // If there's a pending slot, assign immediately and close the drawer
+    if (pendingSlot) {
+      onAssign(pendingSlot.regionName, pendingSlot.seedIndex, id);
+      setPendingSlot(null);
+      setSelectedStarchId(null);
+      setDrawerOpen(false);
+      return;
+    }
+
     const next = selectedStarchId === id ? null : id;
     setSelectedStarchId(next);
     if (next) {
@@ -79,7 +97,10 @@ export default function BracketSeeding({
       {/* Mobile-only: overlay behind drawer */}
       <div
         className={`starch-drawer-overlay ${drawerOpen ? "open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
+        onClick={() => {
+          setDrawerOpen(false);
+          setPendingSlot(null);
+        }}
       />
 
       {/* Mobile-only: toggle button for starch drawer */}
@@ -95,7 +116,9 @@ export default function BracketSeeding({
       {/* Sidebar / mobile drawer */}
       <div className={`seeding-sidebar ${drawerOpen ? "open" : ""}`}>
         <h3>
-          Unassigned ({unassignedCount})
+          {pendingSlot
+            ? `Pick a starch for ${pendingSlot.regionName} #${pendingSlot.seedIndex + 1}`
+            : `Unassigned (${unassignedCount})`}
         </h3>
         <input
           className="sidebar-search"
@@ -166,6 +189,11 @@ export default function BracketSeeding({
               region={region}
               starches={starches}
               selectedStarchId={selectedStarchId}
+              pendingSlot={
+                pendingSlot?.regionName === region.name
+                  ? pendingSlot.seedIndex
+                  : null
+              }
               onAssign={handleSlotClick}
               onRemove={handleSlotRemove}
               onDrop={handleDrop}
