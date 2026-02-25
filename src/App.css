@@ -719,7 +719,7 @@
 
   /* Main content */
   .main-content {
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
 
   /* Starch Pool */
@@ -788,7 +788,7 @@
     gap: 0.4rem;
     width: 100%;
     padding: 0.6rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     background: var(--accent);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -810,26 +810,49 @@
   /* Auto-seed bar */
   .auto-seed-bar {
     flex-wrap: wrap;
-    padding: 0.5rem 0.75rem;
-    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
   }
 
   .auto-seed-bar p {
     width: 100%;
-    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.1rem;
   }
 
-  /* Regions grid - single column */
+  /* Regions grid - single column, tighter */
   .regions-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  /* Region cards - reduce internal padding */
+  .region-header {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .matchups {
+    padding: 0.35rem;
+    gap: 0.35rem;
+  }
+
+  .matchup {
+    padding: 0.3rem;
+    gap: 0.15rem;
+  }
+
+  .seed-slot {
+    padding: 0.25rem 0.4rem;
+    min-height: 32px;
+    gap: 0.3rem;
   }
 
   /* Seed slots - always show remove button on mobile */
   .seed-remove {
     opacity: 1;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.8rem;
   }
 
   /* Export */
@@ -897,6 +920,10 @@
 
 /* Small phones */
 @media (max-width: 380px) {
+  .main-content {
+    padding: 0.35rem;
+  }
+
   .tournament-name-input {
     width: 120px;
     font-size: 1rem;
@@ -910,5 +937,19 @@
   .btn {
     font-size: 0.8rem;
     padding: 0.35rem 0.6rem;
+  }
+
+  .matchups {
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .matchup {
+    padding: 0.2rem;
+  }
+
+  .seed-slot {
+    padding: 0.2rem 0.3rem;
+    min-height: 30px;
   }
 }
