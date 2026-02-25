@@ -5,6 +5,7 @@ interface Props {
   region: Region;
   starches: Starch[];
   selectedStarchId: string | null;
+  pendingSlot: number | null;
   onAssign: (regionName: string, seedIndex: number) => void;
   onRemove: (regionName: string, seedIndex: number) => void;
   onDrop: (regionName: string, seedIndex: number, starchId: string) => void;
@@ -14,6 +15,7 @@ export default function RegionView({
   region,
   starches,
   selectedStarchId,
+  pendingSlot,
   onAssign,
   onRemove,
   onDrop,
@@ -66,6 +68,7 @@ export default function RegionView({
                 seed={seedA}
                 starch={starchA}
                 hasSelection={selectedStarchId !== null}
+                isPending={pendingSlot === seedA - 1}
                 onClick={() =>
                   starchA
                     ? onRemove(region.name, seedA - 1)
@@ -81,6 +84,7 @@ export default function RegionView({
                 seed={seedB}
                 starch={starchB}
                 hasSelection={selectedStarchId !== null}
+                isPending={pendingSlot === seedB - 1}
                 onClick={() =>
                   starchB
                     ? onRemove(region.name, seedB - 1)
@@ -103,6 +107,7 @@ function SeedSlot({
   seed,
   starch,
   hasSelection,
+  isPending,
   onClick,
   onDragOver,
   onDrop,
@@ -112,6 +117,7 @@ function SeedSlot({
   seed: number;
   starch?: Starch;
   hasSelection: boolean;
+  isPending: boolean;
   onClick: () => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
@@ -120,13 +126,13 @@ function SeedSlot({
 }) {
   return (
     <div
-      className={`seed-slot ${starch ? "filled" : ""}`}
+      className={`seed-slot ${starch ? "filled" : ""} ${isPending ? "pending" : ""}`}
       onClick={onClick}
       onDragOver={!starch ? onDragOver : undefined}
       onDrop={!starch ? onDrop : undefined}
       onDragEnter={!starch ? onDragEnter : undefined}
       onDragLeave={!starch ? onDragLeave : undefined}
-      title={starch ? `Click to remove ${starch.name}` : hasSelection ? "Click to place selected starch" : "Select a starch first or drag one here"}
+      title={starch ? `Click to remove ${starch.name}` : hasSelection ? "Click to place selected starch" : "Tap to choose a starch"}
     >
       <span className="seed-number">#{seed}</span>
       {starch ? (
@@ -152,7 +158,9 @@ function SeedSlot({
           </button>
         </>
       ) : (
-        <span className="seed-empty-text">Empty</span>
+        <span className="seed-empty-text">
+          {isPending ? "Picking..." : "Empty"}
+        </span>
       )}
     </div>
   );
